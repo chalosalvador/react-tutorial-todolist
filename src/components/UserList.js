@@ -4,35 +4,38 @@
 import React from 'react';
 
 const UserList = () => {
-  const initialUsers = [
-    {
-      name: 'Chalo',
-      lastname: 'Salvador'
-    },
-    {
-      name: 'María',
-      lastname: 'Morales'
-    },
-    {
-      name: 'Andrés',
-      lastname: 'Andrade'
-    }
-  ];
+
+  const initialUsers = () => {
+    console.log( 'inicializando estado' );
+    return [
+      {
+        name: 'Chalo',
+        lastname: 'Salvador'
+      },
+      {
+        name: 'María',
+        lastname: 'Morales'
+      },
+      {
+        name: 'Andrés',
+        lastname: 'Andrade'
+      }
+    ];
+  }
 
   const [ users, setUsers ] = React.useState( initialUsers );
 
   const handleAddUser = () => {
     const name = document.querySelector( '#name' ).value;
     const lastname = document.querySelector( '#lastname' ).value;
-    const newUsers = [
-      ...users,
-      {
-        name,
-        lastname
-      }
-    ];
-
-    setUsers( newUsers );
+    const newUser = {
+      name,
+      lastname
+    };
+    setUsers( ( prevState ) => [
+      ...prevState,
+      newUser
+    ] );
   };
 
 
@@ -47,7 +50,7 @@ const UserList = () => {
 
         <button onClick={ handleAddUser }>Agregar usuario</button>
       </div>
-      <h1>Lista de usuarios ({users.length} en total)</h1>
+      <h1>Lista de usuarios ({ users.length } en total)</h1>
       <ul>
         {
           users.map( ( user, index ) => (

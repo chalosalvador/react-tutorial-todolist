@@ -11,31 +11,23 @@ const TodoList = () => {
 
   const handleAddTask = () => {
     const task = document.querySelector( '#task' ).value;
-    const newTodos = [
-      ...todos,
-      task
-    ];
-    setTodos( newTodos );
+    setTodos( prevState => [ ...prevState, task ] );
     document.querySelector( '#task' ).value = '';
-
   };
 
   const handleDeleteTask = ( index ) => {
-    const newTodos = [ ...todos ];
-    newTodos.splice( index, 1 );
-    setTodos( newTodos );
+    setTodos( ( prevState ) => {
+      return prevState.filter( ( task, i ) => i !== index );
+    } );
   };
 
   const handleCompleteTask = ( index ) => {
-    const newCompleted = [
-      ...completed,
+    setCompleted( ( prevState ) => [
+      ...prevState,
       todos[ index ]
-    ];
-    setCompleted( newCompleted );
+    ] );
 
-    const newTodos = [ ...todos ];
-    newTodos.splice( index, 1 );
-    setTodos( newTodos );
+    handleDeleteTask( index );
   };
 
 
