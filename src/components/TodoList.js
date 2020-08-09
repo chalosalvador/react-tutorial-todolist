@@ -1,13 +1,57 @@
 /**
  * Created by chalosalvador on 8/2/20
  */
-import React from 'react';
+import React, { useEffect } from 'react';
+import '../styles/todo-list.css';
 
 const TodoList = () => {
 
   const [ todos, setTodos ] = React.useState( [] );
   const [ completed, setCompleted ] = React.useState( [] );
+  const [ darkMode, setDarkMode ] = React.useState( false );
+  const [ windowWidth, setWindowWidth ] = React.useState( window.innerWidth );
 
+  useEffect( () => {
+    console.log( 'efecto', todos.length );
+    if( todos.length > 0 ) {
+      document.title = `${ todos.length } tareas pendientes`;
+    } else {
+      document.title = 'No tienes tareas pendientes';
+    }
+  }, [ todos ] );
+
+  useEffect( () => {
+    console.log( 'cambio de fondo', darkMode );
+    if( darkMode ) {
+      console.log( 'DARK' );
+    } else {
+      console.log( 'LIGHT' );
+    }
+  }, [ darkMode ] );
+
+  useEffect( () => {
+    fetch( 'https://jsonplaceholder.typicode.com/users/1' )
+      .then( ( data ) => {
+        return data.json();
+      } )
+      .then( ( json ) => {
+        console.log( 'Datos de usuario', json );
+      } );
+  }, [] );
+
+  const handleResize = () => {
+    setWindowWidth( window.innerWidth );
+  };
+
+  useEffect( () => {
+    console.log( 'Ejecución del efecto' );
+    window.addEventListener( 'resize', handleResize );
+
+    return () => {
+      console.log( 'retorno del efecto ' );
+      window.removeEventListener( 'resize', handleResize );
+    };
+  } );
 
   const handleAddTask = () => {
     const task = document.querySelector( '#task' ).value;
@@ -30,9 +74,22 @@ const TodoList = () => {
     handleDeleteTask( index );
   };
 
+  const handleDarkMode = () => {
+    setDarkMode( !darkMode );
+  };
 
   return (
-    <div>
+    <div className={ darkMode
+      ? 'dark-mode'
+      : '' }>
+      <div>Ancho de la ventana: { windowWidth }</div>
+      <button onClick={ handleDarkMode }>
+        {
+          darkMode
+            ? 'Modo claro'
+            : 'Modo oscuro'
+        }
+      </button>
       <div>
         <label htmlFor='task'>Tarea</label>
         <input type='text' id='task' />
